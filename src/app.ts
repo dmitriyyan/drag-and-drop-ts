@@ -1,10 +1,10 @@
 class Project {
 	constructor(
-		id: string,
-		title: string,
-		description: string,
-		people: number,
-		status: 'active' | 'finished'
+		public id: string,
+		public title: string,
+		public description: string,
+		public people: number,
+		public status: 'active' | 'finished'
 	) {}
 }
 
@@ -123,7 +123,11 @@ class ProjectList {
 		this.section.classList.add(`${this.type}-projects`);
 
 		projectState.addListener((projects: Project[]) => {
-			this.assignedProjects = projects;
+			this.assignedProjects = projects.filter((project) =>
+				this.type === 'active'
+					? project.status === 'active'
+					: project.status === 'finished'
+			);
 			this.renderProjects();
 		});
 
@@ -134,6 +138,7 @@ class ProjectList {
 		const listEl = document.getElementById(
 			`${this.type}-projects-list`
 		)! as HTMLUListElement;
+		listEl.innerHTML = '';
 
 		for (const project of this.assignedProjects) {
 			// listEl.appendChild();
