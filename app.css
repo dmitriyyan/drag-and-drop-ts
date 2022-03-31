@@ -76,11 +76,11 @@ button:active {
     max-width: 500px;
 }
 
-#finished-projects {
+.finished-projects {
 	border-color: #0044ff;
 }
 
-#finished-projects header {
+.finished-projects header {
 	background: #0044ff;
 }
 
@@ -106,7 +106,7 @@ button:active {
 	margin: 0.5rem 0;
 }
 
-#finished-projects li h2 {
+.finished-projects li h2 {
 	color: #0044ff;
 }
 
@@ -123,6 +123,6 @@ button:active {
 	background: #ffe3ee;
 }
 
-#finished-projects .droppable {
+.finished-projects .droppable {
 	background: #d6e1ff;
 }

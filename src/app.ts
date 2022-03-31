@@ -55,6 +55,39 @@ function autobind(
 	return newDescriptor;
 }
 
+class ProjectList {
+	templateEl: HTMLTemplateElement;
+	appEl: HTMLDivElement;
+	section: HTMLElement;
+
+	constructor(private type: 'active' | 'finished') {
+		this.templateEl = document.getElementById(
+			'project-list'
+		)! as HTMLTemplateElement;
+
+		this.appEl = document.getElementById('app')! as HTMLDivElement;
+
+		const importedNode = document.importNode(this.templateEl.content, true);
+		this.section = importedNode.firstElementChild as HTMLElement;
+		this.section.classList.add(`${this.type}-projects`);
+
+		this.renderList();
+	}
+
+	private addContent() {
+		const listId = `${this.type}-projects-list`;
+		this.section.querySelector('ul')!.id = listId;
+		this.section.querySelector(
+			'h2'
+		)!.textContent = `${this.type.toUpperCase()} PROJECTS`;
+	}
+
+	private renderList() {
+		this.addContent();
+		this.appEl.appendChild(this.section);
+	}
+}
+
 class ProjectInput {
 	templateEl: HTMLTemplateElement;
 	appEl: HTMLDivElement;
@@ -129,8 +162,7 @@ class ProjectInput {
 
 		const userInput = this.harvestUserInput();
 		if (Array.isArray(userInput)) {
-			const [title, description, people] = userInput;
-			console.log(title, description, people);
+			// const [title, description, people] = userInput;
 			this.clearInput();
 		}
 	}
@@ -144,4 +176,6 @@ class ProjectInput {
 	}
 }
 
-new ProjectInput();
+const projectInput = new ProjectInput();
+const activeProjectList = new ProjectList('active');
+const finishedProjectList = new ProjectList('finished');
