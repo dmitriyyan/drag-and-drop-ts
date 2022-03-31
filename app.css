@@ -101,7 +101,7 @@ button:active {
 	margin: 1rem;
 }
 
-.projects li h2 {
+.projects li h3 {
 	color: #ff0062;
 	margin: 0.5rem 0;
 }
@@ -110,12 +110,12 @@ button:active {
 	color: #0044ff;
 }
 
-.projects li h3 {
+.projects li h4 {
 	color: #575757;
 	font-size: 1rem;
 }
 
-.project li p {
+.projects li p {
 	margin: 0;
 }
 
