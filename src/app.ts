@@ -105,23 +105,48 @@ function autobind(
 	return newDescriptor;
 }
 
-class ProjectList {
-	templateEl: HTMLTemplateElement;
-	appEl: HTMLDivElement;
-	section: HTMLElement;
+// Component Base Class
+abstract class Component<T extends HTMLElement, U extends HTMLElement> {
+	templateElement: HTMLTemplateElement;
+	appElement: T;
+	element: U;
+
+	constructor(templateId: string, appElementId: string) {
+		this.templateElement = document.getElementById(
+			templateId
+		)! as HTMLTemplateElement;
+
+		this.appElement = document.getElementById(appElementId)! as T;
+
+		const importedNode = document.importNode(
+			this.templateElement.content,
+			true
+		);
+		this.element = importedNode.firstElementChild as U;
+
+		this.attach();
+	}
+
+	private attach() {
+		this.appElement.appendChild(this.element);
+	}
+
+	abstract configure(): void;
+	abstract renderContent(): void;
+}
+
+class ProjectList extends Component<HTMLDivElement, HTMLElement> {
 	assignedProjects: Project[] = [];
 
 	constructor(private type: 'active' | 'finished') {
-		this.templateEl = document.getElementById(
-			'project-list'
-		)! as HTMLTemplateElement;
+		super('project-list', 'app');
+		this.element.classList.add(`${this.type}-projects`);
 
-		this.appEl = document.getElementById('app')! as HTMLDivElement;
+		this.configure();
+		this.renderContent();
+	}
 
-		const importedNode = document.importNode(this.templateEl.content, true);
-		this.section = importedNode.firstElementChild as HTMLElement;
-		this.section.classList.add(`${this.type}-projects`);
-
+	configure() {
 		projectState.addListener((projects: Project[]) => {
 			this.assignedProjects = projects.filter((project) =>
 				this.type === 'active'
@@ -130,8 +155,14 @@ class ProjectList {
 			);
 			this.renderProjects();
 		});
+	}
 
-		this.renderList();
+	renderContent() {
+		const listId = `${this.type}-projects-list`;
+		this.element.querySelector('ul')!.id = listId;
+		this.element.querySelector(
+			'h2'
+		)!.textContent = `${this.type.toUpperCase()} PROJECTS`;
 	}
 
 	private renderProjects() {
@@ -141,55 +172,38 @@ class ProjectList {
 		listEl.innerHTML = '';
 
 		for (const project of this.assignedProjects) {
+			console.log(project);
 			// listEl.appendChild();
 		}
 	}
-
-	private addContent() {
-		const listId = `${this.type}-projects-list`;
-		this.section.querySelector('ul')!.id = listId;
-		this.section.querySelector(
-			'h2'
-		)!.textContent = `${this.type.toUpperCase()} PROJECTS`;
-	}
-
-	private renderList() {
-		this.addContent();
-		this.appEl.appendChild(this.section);
-	}
 }
 
-class ProjectInput {
-	templateEl: HTMLTemplateElement;
-	appEl: HTMLDivElement;
-	formEl: HTMLFormElement;
+class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
 	titleInputEl: HTMLInputElement;
 	descriptionInputEl: HTMLTextAreaElement;
 	peopleInputEl: HTMLInputElement;
 
 	constructor() {
-		this.templateEl = document.getElementById(
-			'project-input'
-		)! as HTMLTemplateElement;
+		super('project-input', 'app');
 
-		this.appEl = document.getElementById('app')! as HTMLDivElement;
-
-		const importedNode = document.importNode(this.templateEl.content, true);
-		this.formEl = importedNode.firstElementChild as HTMLFormElement;
-
-		this.titleInputEl = this.formEl.querySelector(
+		this.titleInputEl = this.element.querySelector(
 			'#title'
 		)! as HTMLInputElement;
-		this.descriptionInputEl = this.formEl.querySelector(
+		this.descriptionInputEl = this.element.querySelector(
 			'#description'
 		)! as HTMLTextAreaElement;
-		this.peopleInputEl = this.formEl.querySelector(
+		this.peopleInputEl = this.element.querySelector(
 			'#people'
 		)! as HTMLInputElement;
 
-		this.configureForm();
-		this.renderForm();
+		this.configure();
 	}
+
+	configure() {
+		this.element.addEventListener('submit', this.submitHandler.bind(this));
+	}
+
+	renderContent() {}
 
 	private validateInput() {
 		return (
@@ -237,14 +251,6 @@ class ProjectInput {
 			projectState.addProject(title, description, people);
 			this.clearInput();
 		}
-	}
-
-	private configureForm() {
-		this.formEl.addEventListener('submit', this.submitHandler.bind(this));
-	}
-
-	private renderForm() {
-		this.appEl.appendChild(this.formEl);
 	}
 }
 
