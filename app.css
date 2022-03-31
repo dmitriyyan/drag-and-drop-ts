@@ -69,11 +69,11 @@ button:active {
 }
 
 .form {
-    margin: 1rem auto;
+	margin: 1rem auto;
 	padding: 1rem;
 	border: 1px solid #ff0062;
 	background: #f7f7f7;
-    max-width: 500px;
+	max-width: 500px;
 }
 
 .finished-projects {
@@ -93,12 +93,15 @@ button:active {
 	list-style: none;
 	margin: 0;
 	padding: 1rem;
+	display: flex;
 }
 
 .projects li {
 	box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.26);
 	padding: 1rem;
 	margin: 1rem;
+	background: white;
+	max-width: 300px;
 }
 
 .projects li h3 {
