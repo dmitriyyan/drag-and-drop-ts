@@ -1,3 +1,43 @@
+// validator
+interface Validatable {
+	value: string;
+	required?: boolean;
+	minLength?: number;
+	maxLength?: number;
+	min?: number;
+	max?: number;
+}
+
+function validate(inputObj: Validatable) {
+	if (inputObj.required && inputObj.value.trim() === '') {
+		return false;
+	}
+
+	if (
+		inputObj.minLength !== undefined &&
+		inputObj.value.length < inputObj.minLength
+	) {
+		return false;
+	}
+
+	if (
+		inputObj.maxLength !== undefined &&
+		inputObj.value.length > inputObj.maxLength
+	) {
+		return false;
+	}
+
+	if (inputObj.min !== undefined && inputObj.min < parseInt(inputObj.value)) {
+		return false;
+	}
+
+	if (inputObj.max !== undefined && inputObj.max > parseInt(inputObj.value)) {
+		return false;
+	}
+
+	return true;
+}
+
 // autobind decorator
 function autobind(
 	_target: ProjectInput,
@@ -47,9 +87,52 @@ class ProjectInput {
 		this.renderForm();
 	}
 
+	private validateInput() {
+		return (
+			!validate({ value: this.titleInputEl.value, required: true }) ||
+			!validate({
+				value: this.descriptionInputEl.value,
+				required: true,
+				minLength: 5,
+			}) ||
+			!validate({
+				value: this.peopleInputEl.value,
+				required: true,
+				min: 1,
+				max: 5,
+			})
+		);
+	}
+
+	private clearInput() {
+		this.titleInputEl.value = '';
+		this.descriptionInputEl.value = '';
+		this.peopleInputEl.value = '';
+	}
+
+	private harvestUserInput(): [string, string, number] | void {
+		if (!this.validateInput()) {
+			alert('Invalid input, please try again!');
+			return;
+		}
+
+		return [
+			this.titleInputEl.value,
+			this.descriptionInputEl.value,
+			parseInt(this.peopleInputEl.value),
+		];
+	}
+
 	@autobind
 	private submitHandler(event: Event) {
 		event.preventDefault();
+
+		const userInput = this.harvestUserInput();
+		if (Array.isArray(userInput)) {
+			const [title, description, people] = userInput;
+			console.log(title, description, people);
+			this.clearInput();
+		}
 	}
 
 	private configureForm() {
