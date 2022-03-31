@@ -1,3 +1,53 @@
+class Project {
+	constructor(
+		id: string,
+		title: string,
+		description: string,
+		people: number,
+		status: 'active' | 'finished'
+	) {}
+}
+
+type Listener = (items: Project[]) => void;
+
+class ProjectState {
+	private listeners: Listener[] = [];
+	private projects: Project[] = [];
+	private static instance: ProjectState;
+
+	private constructor() {}
+
+	static getInstance() {
+		if (this.instance) {
+			return this.instance;
+		}
+
+		return new ProjectState();
+	}
+
+	addListener(fn: Listener) {
+		this.listeners.push(fn);
+	}
+
+	addProject(title: string, description: string, people: number) {
+		this.projects.push(
+			new Project(
+				Date.now().toString(),
+				title,
+				description,
+				people,
+				'active'
+			)
+		);
+
+		for (const fn of this.listeners) {
+			fn([...this.projects]);
+		}
+	}
+}
+
+const projectState = ProjectState.getInstance();
+
 // validator
 interface Validatable {
 	value: string;
@@ -59,6 +109,7 @@ class ProjectList {
 	templateEl: HTMLTemplateElement;
 	appEl: HTMLDivElement;
 	section: HTMLElement;
+	assignedProjects: Project[] = [];
 
 	constructor(private type: 'active' | 'finished') {
 		this.templateEl = document.getElementById(
@@ -71,7 +122,22 @@ class ProjectList {
 		this.section = importedNode.firstElementChild as HTMLElement;
 		this.section.classList.add(`${this.type}-projects`);
 
+		projectState.addListener((projects: Project[]) => {
+			this.assignedProjects = projects;
+			this.renderProjects();
+		});
+
 		this.renderList();
+	}
+
+	private renderProjects() {
+		const listEl = document.getElementById(
+			`${this.type}-projects-list`
+		)! as HTMLUListElement;
+
+		for (const project of this.assignedProjects) {
+			// listEl.appendChild();
+		}
 	}
 
 	private addContent() {
@@ -162,7 +228,8 @@ class ProjectInput {
 
 		const userInput = this.harvestUserInput();
 		if (Array.isArray(userInput)) {
-			// const [title, description, people] = userInput;
+			const [title, description, people] = userInput;
+			projectState.addProject(title, description, people);
 			this.clearInput();
 		}
 	}
