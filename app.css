@@ -68,6 +68,14 @@ button:active {
 	align-items: center;
 }
 
+.form {
+    margin: 1rem auto;
+	padding: 1rem;
+	border: 1px solid #ff0062;
+	background: #f7f7f7;
+    max-width: 500px;
+}
+
 #finished-projects {
 	border-color: #0044ff;
 }
@@ -117,11 +125,4 @@ button:active {
 
 #finished-projects .droppable {
 	background: #d6e1ff;
-}
-
-#user-input {
-	margin: 1rem;
-	padding: 1rem;
-	border: 1px solid #ff0062;
-	background: #f7f7f7;
 }
