@@ -1,4 +1,5 @@
 import { Draggable, DragTarget } from './models/drag-drop';
+import Component from './components/base-component';
 
 class Project {
 	constructor(
@@ -117,36 +118,6 @@ function autobind(
 	};
 
 	return newDescriptor;
-}
-
-// Component Base Class
-abstract class Component<T extends HTMLElement, U extends HTMLElement> {
-	templateElement: HTMLTemplateElement;
-	appElement: T;
-	element: U;
-
-	constructor(templateId: string, appElementId: string) {
-		this.templateElement = document.getElementById(
-			templateId
-		)! as HTMLTemplateElement;
-
-		this.appElement = document.getElementById(appElementId)! as T;
-
-		const importedNode = document.importNode(
-			this.templateElement.content,
-			true
-		);
-		this.element = importedNode.firstElementChild as U;
-
-		this.attach();
-	}
-
-	private attach() {
-		this.appElement.appendChild(this.element);
-	}
-
-	abstract configure(): void;
-	abstract renderContent(): void;
 }
 
 class ProjectItem
