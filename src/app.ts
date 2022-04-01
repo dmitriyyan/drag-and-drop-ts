@@ -1,6 +1,7 @@
 import { Draggable, DragTarget } from './models/drag-drop';
 import Component from './components/base-component';
 import autobind from './decorators/autobind';
+import validate from './utils/validate';
 
 class Project {
 	constructor(
@@ -63,46 +64,6 @@ class ProjectState {
 }
 
 const projectState = ProjectState.getInstance();
-
-// validator
-interface Validatable {
-	value: string;
-	required?: boolean;
-	minLength?: number;
-	maxLength?: number;
-	min?: number;
-	max?: number;
-}
-
-function validate(inputObj: Validatable) {
-	if (inputObj.required && inputObj.value.trim() === '') {
-		return false;
-	}
-
-	if (
-		inputObj.minLength !== undefined &&
-		inputObj.value.length < inputObj.minLength
-	) {
-		return false;
-	}
-
-	if (
-		inputObj.maxLength !== undefined &&
-		inputObj.value.length > inputObj.maxLength
-	) {
-		return false;
-	}
-
-	if (inputObj.min !== undefined && inputObj.min < parseInt(inputObj.value)) {
-		return false;
-	}
-
-	if (inputObj.max !== undefined && inputObj.max > parseInt(inputObj.value)) {
-		return false;
-	}
-
-	return true;
-}
 
 class ProjectItem
 	extends Component<HTMLDivElement, HTMLLIElement>
