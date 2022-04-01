@@ -1,5 +1,6 @@
 import { Draggable, DragTarget } from './models/drag-drop';
 import Component from './components/base-component';
+import autobind from './decorators/autobind';
 
 class Project {
 	constructor(
@@ -101,23 +102,6 @@ function validate(inputObj: Validatable) {
 	}
 
 	return true;
-}
-
-// autobind decorator
-function autobind(
-	_target: ProjectInput | ProjectItem | ProjectList,
-	_methodName: string,
-	descriptor: PropertyDescriptor
-) {
-	const originalMethod: Function = descriptor.value;
-	const newDescriptor: PropertyDescriptor = {
-		configurable: true,
-		get() {
-			return originalMethod.bind(this);
-		},
-	};
-
-	return newDescriptor;
 }
 
 class ProjectItem
