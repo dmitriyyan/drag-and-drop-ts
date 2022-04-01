@@ -2,66 +2,8 @@ import { Draggable, DragTarget } from './models/drag-drop';
 import Component from './components/base-component';
 import autobind from './decorators/autobind';
 import validate from './utils/validate';
-
-class Project {
-	constructor(
-		public id: string,
-		public title: string,
-		public description: string,
-		public people: number,
-		public status: 'active' | 'finished'
-	) {}
-}
-
-type Listener = (items: Project[]) => void;
-
-class ProjectState {
-	private listeners: Listener[] = [];
-	private projects: Project[] = [];
-	private static instance: ProjectState;
-
-	private constructor() {}
-
-	static getInstance() {
-		if (this.instance) {
-			return this.instance;
-		}
-
-		return new ProjectState();
-	}
-
-	addListener(fn: Listener) {
-		this.listeners.push(fn);
-	}
-
-	addProject(title: string, description: string, people: number) {
-		this.projects.push(
-			new Project(
-				Date.now().toString(),
-				title,
-				description,
-				people,
-				'active'
-			)
-		);
-		this.updateListeners();
-	}
-
-	moveProject(id: string, status: 'active' | 'finished') {
-		const project = this.projects.find((prj) => prj.id === id);
-
-		if (project && project.status !== status) {
-			project.status = status;
-			this.updateListeners();
-		}
-	}
-
-	private updateListeners() {
-		for (const fn of this.listeners) {
-			fn([...this.projects]);
-		}
-	}
-}
+import ProjectState from './state/project';
+import Project from './models/project';
 
 const projectState = ProjectState.getInstance();
 
