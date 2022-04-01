@@ -1,6 +1,8 @@
 import ProjectInput from '../components/project-input';
+import ProjectList from '../components/project-list';
+import ProjectItem from '../components/project-item';
 
-type TargetType = ProjectInput;
+type TargetType = ProjectInput | ProjectList | ProjectItem;
 
 export default function (
 	_target: TargetType,
