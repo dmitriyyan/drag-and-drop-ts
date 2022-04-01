@@ -11,8 +11,6 @@ class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
 	constructor() {
 		super('project-input', 'app');
 
-		super('project-input', 'app');
-
 		this.titleInputEl = this.element.querySelector(
 			'#title'
 		)! as HTMLInputElement;

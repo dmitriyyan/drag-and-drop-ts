@@ -9,8 +9,8 @@ abstract class Component<T extends HTMLElement, U extends HTMLElement> {
 			templateId
 		)! as HTMLTemplateElement;
 		this.appElement = document.getElementById(appElementId)! as T;
-		this.element = document.importNode(this.templateElement, true)
-			.firstElementChild as U;
+		this.element = document.importNode(this.templateElement.content, true)
+            .firstElementChild as U;
 
 		this.attach();
 	}
@@ -19,7 +19,7 @@ abstract class Component<T extends HTMLElement, U extends HTMLElement> {
 		this.appElement.appendChild(this.element);
 	}
 
-    abstract configure(): void;
+	abstract configure(): void;
 	abstract renderContent(): void;
 }
 
