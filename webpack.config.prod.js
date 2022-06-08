@@ -1,6 +1,7 @@
 const path = require('path');
 const CleanPlugin = require('clean-webpack-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
 	mode: 'production',
@@ -8,6 +9,7 @@ module.exports = {
 	output: {
 		filename: 'app.js',
 		path: path.resolve(__dirname, 'dist'),
+		publicPath: 'dist',
 	},
 	module: {
 		rules: [
@@ -16,6 +18,10 @@ module.exports = {
 				use: 'ts-loader',
 				exclude: /node_modules/,
 			},
+			{
+				test: /\.css$/i,
+				use: [MiniCssExtractPlugin.loader, 'css-loader'],
+			},
 		],
 	},
 	resolve: {
@@ -23,9 +29,11 @@ module.exports = {
 	},
 	plugins: [
 		new CleanPlugin.CleanWebpackPlugin(),
+		new MiniCssExtractPlugin({
+			filename: 'app.css',
+		}),
 		new HtmlWebPackPlugin({
-			template: './app/src/index.html',
-			title: 'Test',
+			template: './index.html',
 		}),
 	],
 };

@@ -1,6 +1,6 @@
 const path = require('path');
-const CleanPlugin = require('clean-webpack-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
 	mode: 'development',
@@ -8,14 +8,8 @@ module.exports = {
 	output: {
 		filename: 'app.js',
 		path: path.resolve(__dirname, 'dist'),
-		publicPath: 'dist',
 	},
 	devtool: 'inline-source-map',
-	devServer: {
-		static: {
-			directory: path.join(__dirname, 'dist'),
-		},
-	},
 	module: {
 		rules: [
 			{
@@ -23,13 +17,17 @@ module.exports = {
 				use: 'ts-loader',
 				exclude: /node_modules/,
 			},
+			{
+				test: /\.css$/i,
+				use: ['style-loader', 'css-loader'],
+			},
 		],
 	},
 	resolve: {
 		extensions: ['.ts', '.js'],
 	},
 	plugins: [
-		new CleanPlugin.CleanWebpackPlugin(),
+		new CleanWebpackPlugin(),
 		new HtmlWebPackPlugin({
 			template: './index.html',
 		}),
