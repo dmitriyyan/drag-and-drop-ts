@@ -9,12 +9,9 @@ class ProjectState {
 
 	private constructor() {}
 
-	static getInstance() {
-		if (this.instance) {
-			return this.instance;
-		}
-
-		return new ProjectState();
+    static getInstance() {
+        this.instance = this.instance || new ProjectState();
+        return this.instance;
 	}
 
 	addListener(fn: Listener) {

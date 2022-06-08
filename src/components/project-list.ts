@@ -20,7 +20,7 @@ class ProjectList
 	}
 
 	configure() {
-		ProjectState.getInstance().addListener((projects: Project[]) => {
+		ProjectState.getInstance().addListener((projects) => {
 			this.assignedProjects = projects.filter((project) =>
 				this.type === 'active'
 					? project.status === 'active'

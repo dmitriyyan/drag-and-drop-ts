@@ -6,7 +6,7 @@ type TargetType = ProjectInput | ProjectList | ProjectItem;
 
 export default function (
 	_target: TargetType,
-	_methondName: string,
+	_methodName: string,
 	descriptor: PropertyDescriptor
 ) {
 	const originalMethod = descriptor.value;
