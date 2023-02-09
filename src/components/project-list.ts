@@ -43,11 +43,11 @@ class ProjectList
 	}
 
 	@autobind
-	dragOverHandler(event: DragEvent) {
-		if (
-			event.dataTransfer &&
+  dragOverHandler(event: DragEvent) {
+    if (
+      event.dataTransfer &&
 			event.dataTransfer.types[0] === 'text/plain'
-		) {
+      ) {
 			event.preventDefault();
 			const listEl = this.element.querySelector('ul')!;
 			listEl.classList.add('droppable');
@@ -61,9 +61,14 @@ class ProjectList
 	}
 
 	@autobind
-	dragLeaveHandler(_: DragEvent) {
-		const listEl = this.element.querySelector('ul')!;
-		listEl.classList.remove('droppable');
+  dragLeaveHandler(event: DragEvent) {
+    const currTarget = event.currentTarget as HTMLElement;
+    const relatedTarget = event.relatedTarget as HTMLElement
+    console.log(currTarget, relatedTarget)
+    if (!currTarget.contains(relatedTarget)) {
+      const listEl = this.element.querySelector('ul')!;
+      listEl.classList.remove('droppable');
+    }
 	}
 
 	private renderProjects() {
