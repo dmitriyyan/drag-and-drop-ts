@@ -64,7 +64,6 @@ class ProjectList
   dragLeaveHandler(event: DragEvent) {
     const currTarget = event.currentTarget as HTMLElement;
     const relatedTarget = event.relatedTarget as HTMLElement
-    console.log(currTarget, relatedTarget)
     if (!currTarget.contains(relatedTarget)) {
       const listEl = this.element.querySelector('ul')!;
       listEl.classList.remove('droppable');
