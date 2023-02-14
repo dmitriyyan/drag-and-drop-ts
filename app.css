@@ -94,6 +94,7 @@ button:active {
 	margin: 0;
 	padding: 1rem;
 	display: flex;
+  min-height: 141px;
 }
 
 .projects li {
